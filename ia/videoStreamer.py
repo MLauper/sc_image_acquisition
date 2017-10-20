@@ -14,7 +14,7 @@ class VideoStreamer():
             inputs={inputStream: '-vcodec h264_cuvid'},
             outputs={
                 ('out_' + camera + '.mkv'): '-vcodec h264_nvenc',
-                ('out_' + camera + '_%d.jpg'): '-vf fps=1'
+                ('out_' + camera + '_%d.jpg'): '-vf fps=24'
             }
         )
         print(ff.cmd)
