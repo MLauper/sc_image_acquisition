@@ -1,5 +1,6 @@
 from ia.config import Config
 from ia.videoStreamer import VideoStreamer
+from subprocess import call, Popen
 import asyncio
 
 config = Config()
@@ -14,8 +15,6 @@ loop = asyncio.get_event_loop()
 for camera in cameras:
     print(camera)
 
-    streams[camera] = VideoStreamer()
-
     protocol = config.get_camera_option(camera, 'protocol')
     ip = config.get_camera_option(camera, 'ip')
     user = config.get_camera_option(camera, 'user')
@@ -26,9 +25,20 @@ for camera in cameras:
     clock = config.get_camera_option(camera, 'clock')
     overwriteFiles = config.get_global_option('overwriteFiles')
 
-    loop.run_until_complete(streams[camera].streamVideo(camera, videoPath, imagePath, protocol, ip, user, password, videocodec, resolution, audio, clock, overwriteFiles))
+    streams[camera] = Popen(["python.exe", "start_capture.py",
+                             "--name", camera,
+                             "--videoPath", videoPath,
+                             "--imagePath", imagePath,
+                             "--protocol", protocol,
+                             "--ip", ip,
+                             "--user", user,
+                             "--password", password,
+                             "--videocodec", videocodec,
+                             "--resolution", resolution,
+                             "--audio", audio,
+                             "--clock", clock,
+                             "--overwriteFiles", overwriteFiles
+                             ])
 
-loop.close()
-
-#streamer = VideoStreamer()
-#streamer.streamVideo(videoPath, imagePath)
+for camera in cameras:
+    streams[camera].wait()
