@@ -12,8 +12,8 @@ class VideoStreamer():
             global_options=globalOptions,
             inputs={inputStream: '-vcodec h264_cuvid'},
             outputs={
-                (videoPath + 'out_' + camera + '.mkv'): '-vcodec h264_nvenc',
-                (imagePath + 'out_' + camera + '_%d.jpg'): '-vf fps=1'
+                (videoPath + 'out_' + camera + '_%10d.mkv'): '-c copy -map 0 -segment_time 8 -f segment', #-vcodec h264_nvenc
+                (imagePath + 'out_' + camera + '_%10d.jpg'): '-vf fps=1'
             }
         )
         print(ff.cmd)
