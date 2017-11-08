@@ -24,9 +24,14 @@ for camera in cameras:
     audio = config.get_camera_option(camera, 'audio')
     clock = config.get_camera_option(camera, 'clock')
     overwriteFiles = config.get_global_option('overwriteFiles')
+    fps = config.get_camera_option(camera, 'fps')
+    camera_id = config.get_camera_option(camera, 'camera_id')
+    render_on_gpu = config.get_camera_option(camera, 'render_on_gpu')
+    gpu_id = config.get_camera_option(camera, 'gpu_id')
 
     streams[camera] = Popen(["python.exe", "start_capture.py",
                              "--name", camera,
+                             "--camera", camera_id,
                              "--videoPath", videoPath,
                              "--imagePath", imagePath,
                              "--protocol", protocol,
@@ -37,7 +42,10 @@ for camera in cameras:
                              "--resolution", resolution,
                              "--audio", audio,
                              "--clock", clock,
-                             "--overwriteFiles", overwriteFiles
+                             "--overwriteFiles", overwriteFiles,
+                             "--fps", fps,
+                             "--render_on_gpu", render_on_gpu,
+                             "--gpu_id", gpu_id
                              ])
 
 for camera in cameras:
