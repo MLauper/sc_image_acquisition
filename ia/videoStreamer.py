@@ -8,18 +8,12 @@ class VideoStreamer():
         globalOptions = '-rtsp_transport tcp' + (' -y' if overwriteFiles else '')
         inputStream = protocol + '://' + user + ':' + password + '@' + ip + '/axis-media/media.amp?videocodec=' + videocodec + '&camera=' + camera_id + '&resolution=' + resolution + '&audio=' + audio + '&clock=' + clock
 
-        output_parameters = '-vcodec copy'
-        # if (render_on_gpu):
-        #     output_parameters = '-vcodec h264_nvenc -gpu ' + gpu_id
-        # else:
-        #     output_parameters = ''
-
         ff = ffmpy.FFmpeg(
             global_options=globalOptions,
             inputs={inputStream: '-vcodec h264_cuvid'},
             outputs={
-                (videoPath + 'out_' + camera + '.mkv'): output_parameters,
-                (imagePath + 'out_' + camera + '_%d.jpg'): ('-vf fps=' + fps)
+                (videoPath + 'out_' + camera + '_%10d.mkv'): '-c copy -map 0 -segment_time 3600 -f segment', #-vcodec h264_nvenc
+                (imagePath + 'out_' + camera + '_%10d.jpg'): ('-vf fps=' + fps)
             }
         )
         print(ff.cmd)
